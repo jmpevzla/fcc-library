@@ -13,7 +13,7 @@ const runner            = require('./test-runner');
 main().catch(err => console.error(err))
 
 async function main() {
-  await mongoose.connect(process.env.DB2)
+  await mongoose.connect(process.env.DB)
 }
 
 const booksSchema = mongoose.Schema({
