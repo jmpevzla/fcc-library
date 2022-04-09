@@ -3,11 +3,29 @@
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
+const mongoose    = require('mongoose')
 require('dotenv').config();
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
+
+main().catch(err => console.error(err))
+
+async function main() {
+  await mongoose.connect(process.env.DB2)
+}
+
+const booksSchema = mongoose.Schema({
+  title: String,
+  commentcount: {
+    type: Number,
+    default: 0
+  },
+  comments: [String]
+})
+
+const Books = mongoose.model('Books', booksSchema)
 
 const app = express();
 
@@ -28,7 +46,7 @@ app.route('/')
 fccTestingRoutes(app);
 
 //Routing for API 
-apiRoutes(app);  
+apiRoutes(app, Books);  
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
